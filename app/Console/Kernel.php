@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function() {
             $parser = new ParseController();
             $parser->store();
-        })->everyTenMinutes()->runInBackground();
+        })->everyMinute()->runInBackground();
     }
 
     /**

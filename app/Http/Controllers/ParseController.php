@@ -10,7 +10,8 @@ class ParseController extends Controller
     /**
      * Store new feed items.
      */
-    public function store() {
+    public function store()
+    {
         $url = 'http://static.feed.rbc.ru/rbc/logical/footer/news.rss';
         $rss = shell_exec('curl '.$url);
         $headers = shell_exec('curl -I '.$url.' | grep HTTP/1.1');
@@ -21,14 +22,17 @@ class ParseController extends Controller
         $logs->url = $url;
         $logs->http_code = $code;
 
-        if(!empty($rss) && trim($rss) != '') {
+        if(!empty($rss) && trim($rss) != '')
+        {
             $logs->body = $rss;
             $rss_obj = simplexml_load_string($rss, NULL, LIBXML_NOCDATA);
             $parsed_rss = json_decode(json_encode($rss_obj), TRUE);
 
-            if(isset($parsed_rss['channel']) && isset($parsed_rss['channel']['item'])) {
+            if(isset($parsed_rss['channel']) && isset($parsed_rss['channel']['item']))
+            {
                 $fetcher = new Content();
-                foreach($parsed_rss['channel']['item'] as $item) {
+                foreach($parsed_rss['channel']['item'] as $item)
+                {
                     $content = new Content();
                     $title = $item['title'];
                     $link = $item['link'];
@@ -39,12 +43,13 @@ class ParseController extends Controller
                     $date = date('Y-m-d H:i:s', strtotime($date_string[0]));
 
                     $image = NULL;
-                    if(isset($item['enclosure']) && isset($item['enclosure']['@attributes']) && isset($item['enclosure']['@attributes']['url'])) {
+                    if(isset($item['enclosure']) && isset($item['enclosure']['@attributes']) && isset($item['enclosure']['@attributes']['url']))
+                    {
                         $image = $item['enclosure']['@attributes']['url'];
                     }
-                    $existing_record = $fetcher->where('guid', '=', $guid)->get();
 
-                    if(empty($existing_record)) {
+                    if(!$fetcher->where('guid', '=', $guid)->exists())
+                    {
                         $content->guid = $guid;
                         $content->title = $title;
                         $content->url = $link;
@@ -58,7 +63,9 @@ class ParseController extends Controller
                     }
                 }
             }
-        } else {
+        }
+        else
+        {
             $logs->body = '';
         }
 

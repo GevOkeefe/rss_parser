@@ -14,11 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/parser', [ParseController::class, 'store']);
+Route::get('/', [ParseController::class, 'store']);
 
 
 Route::group(['prefix' => 'admin'], function () {

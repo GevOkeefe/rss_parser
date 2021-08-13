@@ -21,9 +21,5 @@
         </style>
     </head>
     <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
-            <div class="font-semibold">To parse news go to</div>
-            <a class="font-semibold sm:px-6 text-lg" style="border-bottom: 1px red solid;" href="{{ url('parser')  }}">Parser</a>
-        </div>
     </body>
 </html>
